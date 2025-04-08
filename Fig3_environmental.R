@@ -37,34 +37,6 @@ basic_graphical_theme <- function() {
 ############################################# --- Environmental --- #############################################
 #################################################################################################################
 
-tri_data_cop <- 
-  copepoda_final %>%
-    filter(data == "adjusted") %>%
-      as.data.frame() 
-
-copepoda2d <-
-  ggplot(tri_data_cop) +
-    geom_point(aes(x = sst, y = -depth, color = flu), shape = 19, alpha = 0.6, size = tri_data_cop$adj_cop * 200) +
-    scale_color_viridis(option = "C", direction = 1) +
-    scale_y_continuous(limits = c(-140, 0), breaks = seq(-140, 0, by = 20)) +
-    scale_x_continuous(limits = c(12, 24), breaks = seq(12, 24, by = 2)) +
-    labs(x = NULL, y = "Depth (m)", color = "Fluorescence \n(mg / m³)") +
-    basic_graphical_theme() +
-    theme(axis.text.x = element_blank(),
-          legend.position = c(0.86, 0.2),
-          legend.key.size = unit(0.7, "cm"), 
-          legend.text = element_text(size = 10),
-          legend.title = element_text(size = 10))+ 
-    #
-    annotate("point", x = 12, y = 0,   colour = "black", size = max(tri_data_cop$adj_cop) * 200, shape = 21, stroke = 2) +
-    annotate("point", x = 12, y = -10, colour = "black", size = mean(tri_data_cop$adj_cop) * 200, shape = 21, stroke = 2) +
-    annotate("point", x = 12, y = -15, colour = "black", size = min(tri_data_cop$adj_cop) * 200, shape = 21, stroke = 2) +
-    #
-    annotate("text", x = 13.2, y = 0, label = paste(round(max(tri_data_cop$adj_cop), 3)), colour = "black", size = 4) +
-    annotate("text", x = 13.2, y = -8, label = paste(round(mean(tri_data_cop$adj_cop), 3)), colour = "black", size = 4) +
-    annotate("text", x = 13.2, y = -15, label = paste(round(min(tri_data_cop$adj_cop), 3)), colour = "black", size = 4) 
-
-
 
 
 tri_data_rad <- 
@@ -78,10 +50,9 @@ radiolaria2d <-
     scale_color_viridis(option = "C", direction = 1) +
     scale_y_continuous(limits = c(-140, 0), breaks = seq(-140, 0, by = 20)) +
     scale_x_continuous(limits = c(12, 24), breaks = seq(12, 24, by = 2)) +
-    labs(x = NULL, y = NULL, color = "Fluorescence \n(mg / m³)") +
+    labs(x = NULL, y = "Depth (m)", color = "Fluorescence \n(mg / m³)") +
     basic_graphical_theme() +
     theme(axis.text.x = element_blank(),
-          axis.text.y = element_blank(),
           legend.position = "none")+ 
     #
     annotate("point", x = 12.5, y = -5,  colour = "black", size = max(tri_data_rad$adj_rad) * 200, shape = 21, stroke = 2) +
@@ -91,6 +62,59 @@ radiolaria2d <-
     annotate("text", x = 14, y = -5,  label = paste(round(max(tri_data_rad$adj_rad), 3)), colour = "black", size = 4) +
     annotate("text", x = 14, y = -15, label = paste(round(mean(tri_data_rad$adj_rad), 3)), colour = "black", size = 4) +
     annotate("text", x = 14, y = -25, label = "<0.001", colour = "black", size = 4) 
+
+
+
+tri_data_diat <- 
+  diatoms_final %>%
+    filter(data == "adjusted") %>%
+      as.data.frame() 
+
+diatoms2d <-
+  ggplot(tri_data_diat) +
+    geom_point(aes(x = sst, y = -depth, color = flu), shape = 19, alpha = 0.6, size = tri_data_diat$adj_diat * 200) +
+    scale_color_viridis(option = "C", direction = 1) +
+    scale_y_continuous(limits = c(-140, 0), breaks = seq(-140, 0, by = 20)) +
+    scale_x_continuous(limits = c(12, 24), breaks = seq(12, 24, by = 2)) +
+    labs(x = NULL, y = NULL, color = "Fluorescence \n(mg / m³)") +
+    basic_graphical_theme() +
+    theme(axis.text.x = element_blank(),
+          axis.text.y = element_blank(),
+          legend.position = "none")+ 
+    #
+    annotate("point", x = 12.5, y = -5,  colour = "black", size = max(tri_data_diat$adj_diat) * 200, shape = 21, stroke = 2) +
+    annotate("point", x = 12.5, y = -20, colour = "black", size = mean(tri_data_diat$adj_diat) * 200, shape = 21, stroke = 2) +
+    annotate("point", x = 12.5, y = -25, colour = "black", size = min(tri_data_diat$adj_diat) * 200, shape = 21, stroke = 2) +
+    #
+    annotate("text", x = 14, y = -5,  label = paste(round(max(tri_data_diat$adj_diat), 3)), colour = "black", size = 4) +
+    annotate("text", x = 14, y = -15, label = paste(round(mean(tri_data_diat$adj_diat), 3)), colour = "black", size = 4) +
+    annotate("text", x = 14, y = -25, label = "<0.001", colour = "black", size = 4) 
+
+
+
+tri_data_cop <- 
+  copepoda_final %>%
+    filter(data == "adjusted") %>%
+      as.data.frame() 
+
+copepoda2d <-
+  ggplot(tri_data_cop) +
+    geom_point(aes(x = sst, y = -depth, color = flu), shape = 19, alpha = 0.6, size = tri_data_cop$adj_cop * 200) +
+    scale_color_viridis(option = "C", direction = 1) +
+    scale_y_continuous(limits = c(-140, 0), breaks = seq(-140, 0, by = 20)) +
+    scale_x_continuous(limits = c(12, 24), breaks = seq(12, 24, by = 2)) +
+    labs(x = "SST (°C)", y = "Depth (m)", color = "Fluorescence \n(mg / m³)") +
+    basic_graphical_theme() +
+    theme(legend.position = "none")+ 
+    #
+    annotate("point", x = 12, y = 0,   colour = "black", size = max(tri_data_cop$adj_cop) * 200, shape = 21, stroke = 2) +
+    annotate("point", x = 12, y = -10, colour = "black", size = mean(tri_data_cop$adj_cop) * 200, shape = 21, stroke = 2) +
+    annotate("point", x = 12, y = -15, colour = "black", size = min(tri_data_cop$adj_cop) * 200, shape = 21, stroke = 2) +
+    #
+    annotate("text", x = 13.2, y = 0, label = paste(round(max(tri_data_cop$adj_cop), 3)), colour = "black", size = 4) +
+    annotate("text", x = 13.2, y = -8, label = paste(round(mean(tri_data_cop$adj_cop), 3)), colour = "black", size = 4) +
+    annotate("text", x = 13.2, y = -15, label = paste(round(min(tri_data_cop$adj_cop), 3)), colour = "black", size = 4) 
+
 
 
 
@@ -106,9 +130,13 @@ gelatinous2d <-
     scale_color_viridis(option = "C", direction = 1) +
     scale_y_continuous(limits = c(-140, 0), breaks = seq(-140, 0, by = 20)) +
     scale_x_continuous(limits = c(12, 24), breaks = seq(12, 24, by = 2)) +
-    labs(x = "SST (°C)", y = "Depth (m)", color = "Fluorescence \n(mg / m³)") +
+    labs(x = "SST (°C)", y = NULL, color = "Fluorescence \n(mg / m³)") +
     basic_graphical_theme() +
-    theme(legend.position = "none")+ 
+    theme(axis.text.y = element_blank(),
+          legend.position = c(0.86, 0.2),
+          legend.key.size = unit(0.7, "cm"), 
+          legend.text = element_text(size = 10),
+          legend.title = element_text(size = 10))+ 
     #
     annotate("point", x = 12.5, y = -5,  colour = "black", size = max(tri_data_gel$adj_gel) * 80, shape = 21, stroke = 2) +
     annotate("point", x = 12.5, y = -20, colour = "black", size = mean(tri_data_gel$adj_gel) * 80, shape = 21, stroke = 2) +
@@ -121,35 +149,10 @@ gelatinous2d <-
 
 
 
-tri_data_diat <- 
-  diatoms_final %>%
-    filter(data == "adjusted") %>%
-      as.data.frame() 
-
-diatoms2d <-
-  ggplot(tri_data_diat) +
-    geom_point(aes(x = sst, y = -depth, color = flu), shape = 19, alpha = 0.6, size = tri_data_diat$adj_diat * 200) +
-    scale_color_viridis(option = "C", direction = 1) +
-    scale_y_continuous(limits = c(-140, 0), breaks = seq(-140, 0, by = 20)) +
-    scale_x_continuous(limits = c(12, 24), breaks = seq(12, 24, by = 2)) +
-    labs(x = "SST (°C)", y = NULL, color = "Fluorescence \n(mg / m³)") +
-    basic_graphical_theme() +
-    theme(axis.text.y = element_blank(),
-          legend.position = "none")+ 
-    #
-    annotate("point", x = 12.5, y = -5,  colour = "black", size = max(tri_data_diat$adj_diat) * 200, shape = 21, stroke = 2) +
-    annotate("point", x = 12.5, y = -20, colour = "black", size = mean(tri_data_diat$adj_diat) * 200, shape = 21, stroke = 2) +
-    annotate("point", x = 12.5, y = -25, colour = "black", size = min(tri_data_diat$adj_diat) * 200, shape = 21, stroke = 2) +
-    #
-    annotate("text", x = 14, y = -5,  label = paste(round(max(tri_data_diat$adj_diat), 3)), colour = "black", size = 4) +
-    annotate("text", x = 14, y = -15, label = paste(round(mean(tri_data_diat$adj_diat), 3)), colour = "black", size = 4) +
-    annotate("text", x = 14, y = -25, label = "<0.001", colour = "black", size = 4) 
-
-
 
 layout <- rbind(c(1, 2), c(3, 4))
 
-taxons2d <- grid.arrange(copepoda2d, radiolaria2d, gelatinous2d, diatoms2d, layout_matrix = layout)
+taxons2d <- grid.arrange( radiolaria2d,  diatoms2d, copepoda2d, gelatinous2d, layout_matrix = layout)
 
 ggsave(taxons2d, width = 30, height = 30, units = "cm", dpi=600, path="./figures", 
        filename="Fig. 3 - Environmental.pdf", onefile = FALSE, useDingbats = FALSE) 
