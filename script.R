@@ -15,7 +15,7 @@ options(scipen = 999)
 
 
 df_original <- read.csv("df_original.csv", head = T)
-spatial_data <- read.csv("spatial_data.csv", head = T, sep = ";" , dec = ",")
+spatial_data <- read.csv("spatial_data.csv", head = T, sep = ",")
 
 df_termoclina <- 
   df_original %>%
@@ -40,17 +40,43 @@ df_termoclina <-
                                 dplyr::select(station,lat,lon,depth,temperature,strat)
 
 
-  
+df_termoclina$color <- 
+  case_when(df_termoclina$strat == "below"  ~ alpha("#329243", 0.6),
+            df_termoclina$strat == "middle" ~ alpha("#FD8E3F", 0.6),
+            df_termoclina$strat == "upper"  ~ alpha("#D73529", 0.6), TRUE ~ NA_character_ )
+
+
 thermo_profiles <-
   ggplot(df_termoclina) +
-  geom_line(aes(x = temperature, y = -depth, color = strat), linewidth = 1) +
-  labs(x = "SST°C", y = "Depth (m)")+
-  scale_y_continuous()+
-  facet_wrap(~station, nrow = 4)
+     geom_line(aes(x = temperature, y = -depth, color = color), linewidth = 1.2) +
+      labs(x = "Temperature (°C)", y = "Depth (m)")+
+      scale_y_continuous(limits = c(-140,0), breaks = seq(-140, 0, by = 40))+
+      scale_x_continuous(limits = c(12,28), breaks = seq(12, 28, by = 5))+
+      scale_color_identity() +
+      facet_wrap(~station, nrow = 8)+
+      theme(axis.text.y = element_text(colour = "black", size = 10, angle = 0, hjust = 0.5, vjust = 0.5, face = "plain"),
+            axis.text.x = element_text(colour = "black", size = 10, angle = 0, hjust = 0.5, vjust = 0.0, face = "plain"),
+            #       
+            panel.grid.major = element_line(linewidth = 0.5, colour = "grey95", lineend = "butt"), 
+            panel.background = element_blank(),
+            panel.border = element_rect(colour = "black", linewidth = 1, fill = NA),
+            #      
+            strip.background = element_rect(colour = "black", linewidth = 1, fill = "grey80"),
+            strip.text = element_text(colour = "black", size = 10),
+            #
+            axis.line.x.bottom = element_line(linewidth = 0, colour = "black", lineend = "butt"),
+            axis.line.x.top    = element_line(linewidth = 0, colour = "black", lineend = "butt"),
+            axis.line.y.left   = element_line(linewidth = 0, colour = "black", lineend = "butt"),
+            axis.line.y.right  = element_line(linewidth = 0, colour = "black", lineend = "butt"),
+            #
+            axis.ticks.y = element_blank(),
+            axis.ticks.x = element_blank(),
+            #
+            legend.position = element_blank())
 
 
-ggsave(thermo_profiles, width = 40, height = 20, units = "cm", dpi=600, path="./figures", filename="Fig. S1 - Thermo_profiles.jpeg")
-ggsave(thermo_profiles, width = 40, height = 20, units = "cm", dpi=600, path="./figures", filename="Fig. S1 - Thermo_profiles.pdf", onefile = FALSE, useDingbats = FALSE) 
+ggsave(thermo_profiles, width = 30, height = 40, units = "cm", dpi=600, path="./figures", filename="Fig. S1 - Thermo_profiles.jpeg")
+ggsave(thermo_profiles, width = 30, height = 40, units = "cm", dpi=600, path="./figures", filename="Fig. S1 - Thermo_profiles.pdf", onefile = FALSE, useDingbats = FALSE) 
 
 
 
